@@ -103,6 +103,7 @@ button:focus-visible{outline:4px solid var(--sky);outline-offset:4px}
 .arrow:active{transform:translateY(5px);box-shadow:0 2px 0 var(--sky-deep)}
 .arrow svg{width:40px;height:40px}
 .bounce{animation:pop .45s}
+.learn .parents{width:auto}
 
 /* drag */
 .zone{--s:clamp(130px,min(36vw,32vh),260px);width:calc(var(--s)*1.1);height:calc(var(--s)*1.1);border-radius:30%;border:6px dashed var(--muted);display:grid;place-items:center;background:rgba(255,255,255,.4);transition:background .2s,border-color .2s}
@@ -192,7 +193,7 @@ const store = {
   get(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } },
   set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
 };
-const settings = Object.assign({vi:true, slow:true}, store.get('bhta-settings', {}));
+const settings = Object.assign({vi:true, slow:true, auto:false, loop:false}, store.get('bhta-settings', {}));
 const stars = store.get('bhta-stars', {});
 
 let gen = 0;                       // bumps on every screen change so old timers do nothing
@@ -264,10 +265,10 @@ getJson('audio/packs.json').then(async index => {
 });
 const player = new Audio();          // one element, unlocked by the first tap, reused (iOS blocks new ones)
 player.preload = 'auto';
-let queue = [];   // the start button's greeting plays inside a tap, which unlocks this element on iOS
+let queue = [], queueDone = null;   // the start button's greeting plays inside a tap, which unlocks this element on iOS
 player.onended = () => playPart();
 function stopVoice(){
-  queue = []; try { player.pause(); } catch(e){}
+  queue = []; queueDone = null; try { player.pause(); } catch(e){}
   try { speechSynthesis.cancel(); } catch(e){}
 }
 
@@ -297,7 +298,8 @@ function utter(text, lang, onDone){
 }
 // Each part is played from its recorded clip when there is one, otherwise read by the device voice.
 function playPart(){
-  const part = queue.shift(); if (!part) return;
+  const part = queue.shift();
+  if (!part){ const cb = queueDone; queueDone = null; if (cb) cb(); return; }
   const [lang, text] = part;
   const url = CLIPS[clipKey(lang, text)];
   if (url){
@@ -308,9 +310,9 @@ function playPart(){
   } else playPart();
 }
 // Say the English line, then (optionally) the Vietnamese meaning.
-function talk(en, vi){
+function talk(en, vi, onDone){
   stopVoice(); talkId++;
-  queue = [['en', en]];
+  queue = [['en', en]]; queueDone = onDone || null;
   if (vi && settings.vi) queue.push(['vi', vi]);
   playPart();
 }
@@ -435,15 +437,42 @@ function learn(t, i = 0){
         <button class="arrow" id="prev" aria-label="Trước">${ICON.left}</button>
         <button class="arrow" id="next" aria-label="Tiếp">${ICON.right}</button>
       </div>
+      <div class="parents">
+        <button class="chip" id="optAuto" aria-pressed="${settings.auto}"><span class="sw"></span>Tự chạy</button>
+        <button class="chip" id="optLoop" aria-pressed="${settings.loop}"><span class="sw"></span>Lặp lại</button>
+      </div>
     </div>`);
-  const say = () => { talk(...SAY.word(item)); const c = $('#card'); c.classList.remove('bounce'); void c.offsetWidth; c.classList.add('bounce'); };
+  // Auto-play: once the word (and its meaning) has been read, wait a moment and turn to the next card.
+  const g = gen;
+  let autoTimer = null;
+  const autoNext = () => {
+    clearTimeout(autoTimer);
+    if (settings.auto) autoTimer = setTimeout(() => { if (g === gen && settings.auto) next(); }, 1500);
+  };
+  const say = () => {
+    clearTimeout(autoTimer);
+    talk(...SAY.word(item), autoNext);
+    autoTimer = setTimeout(autoNext, 12000);   // in case the audio never reports that it ended
+    const c = $('#card'); c.classList.remove('bounce'); void c.offsetWidth; c.classList.add('bounce');
+  };
   later(say, 250);
   onBack(() => topicScreen(t));
   $('#say').onclick = say;
   $('#card').onclick = say;
-  const next = () => { sfx.pop(); if (i + 1 >= t.items.length) celebrate(t, 'learn'); else learn(t, i + 1); };
+  const next = () => {
+    sfx.pop();
+    if (i + 1 < t.items.length) learn(t, i + 1);
+    else if (settings.loop) learn(t, 0);
+    else celebrate(t, 'learn');
+  };
   const prev = () => { sfx.pop(); learn(t, (i - 1 + t.items.length) % t.items.length); };
   $('#next').onclick = next; $('#prev').onclick = prev;
+  const toggle = (id, key) => $(id).onclick = e => {
+    settings[key] = !settings[key]; store.set('bhta-settings', settings);
+    e.currentTarget.setAttribute('aria-pressed', settings[key]); sfx.pop();
+    if (key === 'auto') { if (settings.auto) say(); else clearTimeout(autoTimer); }
+  };
+  toggle('#optAuto', 'auto'); toggle('#optLoop', 'loop');
   // swipe left/right on the stage
   let sx = null;
   $('.stage').addEventListener('pointerdown', e => { sx = e.clientX; });
