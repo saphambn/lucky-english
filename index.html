@@ -69,6 +69,19 @@ button:focus-visible{outline:4px solid var(--sky);outline-offset:4px}
 .tile b{font-size:clamp(1.3rem,3.4vmin,1.9rem);font-weight:800;line-height:1.1}
 .tile small{font-size:clamp(.85rem,2.2vmin,1.05rem);color:var(--ink);opacity:.72}
 .tile .star{position:absolute;top:10px;right:14px;font-size:1.6rem;color:var(--sun-deep)}
+/* level tabs on the home screen */
+.levels{display:flex;gap:clamp(8px,2vmin,16px);justify-content:center;flex-wrap:wrap;width:100%;max-width:820px}
+.lvl{flex:1;min-width:96px;max-width:240px;background:var(--card);border-radius:24px;box-shadow:0 5px 0 var(--card-edge);padding:8px 12px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;font-size:clamp(1rem,2.8vmin,1.35rem);transition:transform .08s}
+.lvl .li{font-size:1.6em;line-height:1}
+.lvl small{display:block;font-size:.7em;font-weight:600;opacity:.75}
+.lvl[aria-current="true"]{background:var(--sun);box-shadow:0 5px 0 var(--sun-deep)}
+.lvl.locked{opacity:.6}
+.lvl:active{transform:translateY(4px);box-shadow:0 1px 0 var(--card-edge)}
+.lvl.shake{animation:shake .4s}
+.lockmsg{margin:0;font-weight:700;text-align:center;color:var(--muted)}
+.word .sent{display:block;font-size:.6em;color:var(--sky);margin-top:6px}
+.learn .word .sent small{font-size:.6em;margin-top:4px}
+@media (max-width:560px){.lvl{flex-direction:column;gap:2px;padding:8px 6px;min-width:0}.lvl .li{font-size:1.3em}}
 .parents{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;width:100%;max-width:960px}
 .chip{background:var(--card);border-radius:999px;padding:10px 18px;font-size:1rem;font-weight:700;box-shadow:0 4px 0 var(--card-edge);display:flex;gap:8px;align-items:center}
 .chip .sw{width:40px;height:24px;border-radius:12px;background:var(--card-edge);position:relative;transition:background .15s}
@@ -87,6 +100,8 @@ button:focus-visible{outline:4px solid var(--sky);outline-offset:4px}
 .num .pips{display:flex;flex-wrap:wrap;justify-content:center;gap:calc(var(--s)*.03);max-width:calc(var(--s)*.7)}
 .num .pips i{width:calc(var(--s)*.11);height:calc(var(--s)*.11);border-radius:50%;background:var(--berry)}
 .row{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(14px,3.5vmin,36px)}
+.row.many .card{--s:clamp(96px,min(21vw,30vh),210px)}
+@media (orientation:portrait){.row.many{max-width:calc(min(40vw,24vh)*2 + 40px)}.row.many .card{--s:clamp(96px,min(40vw,24vh),210px)}}
 .prompt{margin:0;font-size:clamp(1.6rem,5vmin,2.8rem);font-weight:800;text-align:center;line-height:1.1}
 .prompt small{display:block;font-size:.5em;font-weight:500;color:var(--muted)}
 
@@ -118,6 +133,8 @@ button:focus-visible{outline:4px solid var(--sky);outline-offset:4px}
 /* match */
 .mgrid{--s:clamp(90px,min(27vw,30vh),190px);display:grid;grid-template-columns:repeat(3,var(--s));gap:clamp(12px,2.5vmin,24px)}
 @media (orientation:portrait) and (max-width:500px){.mgrid{--s:clamp(90px,min(40vw,22vh),190px);grid-template-columns:repeat(2,var(--s))}}
+.mgrid.eight{--s:clamp(80px,min(21vw,30vh),180px);grid-template-columns:repeat(4,var(--s))}
+@media (orientation:portrait){.mgrid.eight{--s:clamp(70px,min(40vw,17vh),170px);grid-template-columns:repeat(2,var(--s))}}
 .mcard{width:var(--s);height:var(--s);perspective:800px;background:none;padding:0}
 .mcard .in{display:block;position:relative;width:100%;height:100%;transition:transform .4s;transform-style:preserve-3d}
 .mcard.open .in{transform:rotateY(180deg)}
@@ -175,7 +192,64 @@ const TOPICS = [
   {id:'body', en:'My Body', vi:'Cơ thể', icon:'👂', t:'#FFF1B0', td:'#E0C04A', kind:'emoji', items:[
     ['eye','con mắt','👁️'],['ear','cái tai','👂'],['nose','cái mũi','👃'],['mouth','cái miệng','👄'],
     ['hand','bàn tay','✋'],['foot','bàn chân','🦶']]},
-].map(t => ({...t, items: t.items.map(([en,vi,v]) => ({en,vi,v}))}));
+  /* ---- Level 2: new everyday words; games show 4 pictures and 4 pairs ---- */
+  {id:'family', level:2, en:'Family', vi:'Gia đình', icon:'👨‍👩‍👧', t:'#FFD9C7', td:'#E89A74', kind:'emoji', items:[
+    ['mommy','mẹ','👩'],['daddy','bố','👨'],['baby','em bé','👶'],['grandma','bà','👵'],
+    ['grandpa','ông','👴'],['brother','anh trai','👦'],['sister','chị gái','👧']]},
+  {id:'food', level:2, en:'Food', vi:'Đồ ăn', icon:'🍚', t:'#FFE9B8', td:'#E2B54E', kind:'emoji', items:[
+    ['rice','cơm','🍚'],['bread','bánh mì','🍞'],['egg','quả trứng','🥚'],['milk','sữa','🥛'],
+    ['noodles','mì sợi','🍜'],['cake','bánh ngọt','🍰'],['ice cream','kem','🍦'],['water','nước','💧']]},
+  {id:'toys', level:2, en:'Toys', vi:'Đồ chơi', icon:'🧸', t:'#D7E8FF', td:'#86A9DE', kind:'emoji', items:[
+    ['ball','quả bóng','⚽'],['teddy bear','gấu bông','🧸'],['doll','búp bê','🪆'],['kite','cái diều','🪁'],
+    ['balloon','bóng bay','🎈'],['drum','cái trống','🥁'],['robot','người máy','🤖'],['yo-yo','con quay','🪀']]},
+  {id:'weather', level:2, en:'Weather', vi:'Thời tiết', icon:'🌦️', t:'#D2F1F7', td:'#74C1D1', kind:'emoji', items:[
+    ['sun','mặt trời','☀️'],['cloud','đám mây','☁️'],['rain','mưa','🌧️'],['snow','tuyết','❄️'],
+    ['wind','gió','🌬️'],['rainbow','cầu vồng','🌈']]},
+  {id:'numbers2', level:2, en:'Numbers 6–10', vi:'Số 6 đến 10', icon:'🔟', t:'#CDE3FF', td:'#7EA7E0', kind:'number', items:[
+    ['six','số sáu',6],['seven','số bảy',7],['eight','số tám',8],['nine','số chín',9],['ten','số mười',10]]},
+  /* ---- Level 3: actions, feelings, places and short phrases; Learn also reads a short sentence ---- */
+  {id:'actions', level:3, en:'Actions', vi:'Hành động', icon:'🏃', t:'#D8F5C9', td:'#83C565', kind:'emoji', ask:'who', items:[
+    ['run','chạy','🏃',{q:'running',vq:'bạn đang chạy',s:'I can run!',vs:'Bé biết chạy!'}],
+    ['jump','nhảy','🤸',{q:'jumping',vq:'bạn đang nhảy',s:'I can jump!',vs:'Bé biết nhảy!'}],
+    ['swim','bơi','🏊',{q:'swimming',vq:'bạn đang bơi',s:'I can swim!',vs:'Bé biết bơi!'}],
+    ['eat','ăn','🍽️',{q:'eating',vq:'ăn cơm',s:'I can eat!',vs:'Bé tự ăn cơm!'}],
+    ['sleep','ngủ','😴',{q:'sleeping',vq:'bạn đang ngủ',s:'Time to sleep!',vs:'Đến giờ đi ngủ!'}],
+    ['dance','múa','💃',{q:'dancing',vq:'bạn đang múa',s:'I can dance!',vs:'Bé biết múa!'}],
+    ['sing','hát','🎤',{q:'singing',vq:'bạn đang hát',s:'I can sing!',vs:'Bé biết hát!'}],
+    ['clap','vỗ tay','👏',{q:'clapping',vq:'vỗ tay',s:'Clap your hands!',vs:'Vỗ tay nào!'}]]},
+  {id:'feelings', level:3, en:'Feelings', vi:'Cảm xúc', icon:'😊', t:'#FFE0EC', td:'#E890B1', kind:'emoji', noun:' face', items:[
+    ['happy','vui','😄',{vq:'mặt vui',s:'I am happy!',vs:'Bé đang vui!'}],
+    ['sad','buồn','😢',{vq:'mặt buồn',s:'I am sad.',vs:'Bé đang buồn.'}],
+    ['angry','tức giận','😠',{vq:'mặt tức giận',s:'I am angry!',vs:'Bé đang giận!'}],
+    ['scared','sợ hãi','😨',{vq:'mặt sợ hãi',s:'I am scared!',vs:'Bé sợ quá!'}],
+    ['sleepy','buồn ngủ','🥱',{vq:'mặt buồn ngủ',s:'I am sleepy.',vs:'Bé buồn ngủ rồi.'}],
+    ['hungry','đói bụng','🤤',{vq:'mặt đói bụng',s:'I am hungry!',vs:'Bé đói bụng!'}]]},
+  {id:'places', level:3, en:'Places', vi:'Nơi chốn', icon:'🏫', t:'#E6DDFB', td:'#A592DE', kind:'emoji', items:[
+    ['house','ngôi nhà','🏠',{s:"Let's go home!",vs:'Mình về nhà nào!'}],
+    ['school','trường học','🏫',{s:"Let's go to school!",vs:'Mình đi học nào!'}],
+    ['park','công viên','🏞️',{s:"Let's go to the park!",vs:'Mình đi công viên nào!'}],
+    ['beach','bãi biển','🏖️',{s:"Let's go to the beach!",vs:'Mình đi biển nào!'}],
+    ['zoo','sở thú','🦒',{s:"Let's go to the zoo!",vs:'Mình đi sở thú nào!'}],
+    ['hospital','bệnh viện','🏥',{s:'This is the hospital.',vs:'Đây là bệnh viện.'}],
+    ['market','chợ','🛒',{s:"Let's go to the market!",vs:'Mình đi chợ nào!'}]]},
+  {id:'phrases', level:3, en:'Hello & Thanks', vi:'Lời chào', icon:'👋', t:'#FFF1B0', td:'#E0C04A', kind:'emoji', ask:'quote', items:[
+    ['hello','xin chào','👋',{s:'Hello! How are you?',vs:'Xin chào! Bạn khỏe không?'}],
+    ['goodbye','tạm biệt','🚪',{s:'Goodbye! See you!',vs:'Tạm biệt! Hẹn gặp lại!'}],
+    ['thank you','cảm ơn','🙏',{s:'Thank you, Mommy!',vs:'Con cảm ơn mẹ!'}],
+    ['sorry','xin lỗi','🥺',{s:'I am sorry.',vs:'Con xin lỗi.'}],
+    ['good night','chúc ngủ ngon','🌙',{s:'Good night, Daddy!',vs:'Chúc bố ngủ ngon!'}],
+    ['I love you','con yêu bố mẹ','❤️',{s:'I love you, Mommy!',vs:'Con yêu mẹ!'}]]},
+].map(t => ({level: 1, ...t, items: t.items.map(([en,vi,v,x]) => ({en,vi,v,...x}))}));
+
+// A level opens once the child has earned enough stars (one per finished game) in the level before it.
+const LEVELS = [
+  {n:1, icon:'🌱', vi:'Cấp 1', need:0},
+  {n:2, icon:'🌿', vi:'Cấp 2', need:6},
+  {n:3, icon:'🌳', vi:'Cấp 3', need:6},
+];
+const NUM_EN = ['', 'one', 'two', 'three'], NUM_VI = ['', 'một', 'hai', 'ba'];
+// Level 1 games show 3 pictures and 3 pairs; later levels show 4.
+const choices = t => t.level > 1 ? 4 : 3;
 
 const MODES = [
   {id:'learn', en:'Learn', vi:'Học từ mới', icon:'👀', t:'#FFFFFF', td:'#C9D6E8'},
@@ -193,7 +267,7 @@ const store = {
   get(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } },
   set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
 };
-const settings = Object.assign({vi:true, slow:true, auto:false, loop:false}, store.get('bhta-settings', {}));
+const settings = Object.assign({vi:true, slow:true, auto:false, loop:false, level:1, unlockAll:false}, store.get('bhta-settings', {}));
 const stars = store.get('bhta-stars', {});
 
 let gen = 0;                       // bumps on every screen change so old timers do nothing
@@ -211,30 +285,42 @@ const ICON = {
 
 /* ================= SOUND ================= */
 /* Every spoken line, in one place. tools/generate-audio.mjs records each of these to an MP3. */
-const art = t => t.kind === 'emoji' ? 'the ' : '';
+const art = t => t.kind === 'emoji' && t.ask !== 'quote' ? 'the ' : '';
+// Level 1 has a recorded Vietnamese clip for every whole sentence. Later levels say a Vietnamese sentence
+// as a few short clips in a row (e.g. "Đúng rồi!" + "bánh mì"), so each new word needs just one or two clips.
+const vq = o => o.vq || o.vi;
+const viLine = (t, whole, parts) => t.level > 1 ? parts : whole;
+const thing = (o, t) => t.ask === 'who' ? o.q : `${art(t)}${o.en}${t.noun || ''}`;
 const SAY = {
+  level:   n => [`Level ${NUM_EN[n]}`, `Cấp độ ${NUM_VI[n]}`],
+  locked:  () => ['Collect more stars!', 'Bé chơi thêm để nhận sao nhé!'],
+  sentence: o => [o.s, o.vs],
   hello:   () => ["Hello! Let's learn English!", 'Xin chào! Cùng học tiếng Anh nào!'],
   pairs:   () => ['Find the pairs!', 'Tìm hai hình giống nhau nhé!'],
   win:     () => ['Great job! You did it!', 'Bé giỏi quá!'],
   topic:   t => [t.en, t.vi],
   word:    o => [o.en, o.vi],
-  find:    (o, t) => [phrase('Find', o, t), `Tìm ${o.vi} nào!`],
-  drag:    (o, t) => [phrase('Drag', o, t), `Kéo ${o.vi} vào khung nhé!`],
-  findYes: o => [`Yes! ${o.en}!`, `Đúng rồi! ${o.vi}!`],
-  dragYes: o => [`Yes! ${o.en}!`, `Giỏi quá! ${o.vi}!`],
-  thatIs:  (o, t) => [`That is ${art(t)}${o.en}.`, `Đây là ${o.vi}.`],
-  retry:   (o, t) => [`That is ${art(t)}${o.en}. Try again!`, `Đây là ${o.vi}. Thử lại nhé!`],
-  pairYes: o => [`${o.en}! Good job!`, `${o.vi}! Giỏi lắm!`],
+  find:    (o, t) => [phrase('Find', o, t), viLine(t, `Tìm ${o.vi} nào!`, ['Bé hãy tìm', vq(o)])],
+  drag:    (o, t) => [phrase('Drag', o, t), viLine(t, `Kéo ${o.vi} vào khung nhé!`, ['Bé kéo', vq(o), 'vào khung nhé!'])],
+  findYes: (o, t) => [`Yes! ${o.en}!`, viLine(t, `Đúng rồi! ${o.vi}!`, ['Đúng rồi!', vq(o)])],
+  dragYes: (o, t) => [`Yes! ${o.en}!`, viLine(t, `Giỏi quá! ${o.vi}!`, ['Giỏi quá!', vq(o)])],
+  thatIs:  (o, t) => [`That is ${thing(o, t)}.`, viLine(t, `Đây là ${o.vi}.`, ['Đây là', vq(o)])],
+  retry:   (o, t) => [`That is ${thing(o, t)}. Try again!`, viLine(t, `Đây là ${o.vi}. Thử lại nhé!`, ['Đây là', vq(o), 'Thử lại nhé!'])],
+  pairYes: (o, t) => [`${o.en}! Good job!`, viLine(t, `${o.vi}! Giỏi lắm!`, [vq(o), 'Giỏi lắm!'])],
 };
+const viText = vi => Array.isArray(vi) ? vi.join(' ') : vi;   // what the screen shows
 // The full list of lines to record, de-duplicated: [{lang, text, key}]
 window.ALL_LINES = () => {
-  const pairs = [SAY.hello(), SAY.pairs(), SAY.win()];
+  const pairs = [SAY.hello(), SAY.pairs(), SAY.win(), SAY.locked(), ...LEVELS.map(l => SAY.level(l.n))];
   TOPICS.forEach(t => {
     pairs.push(SAY.topic(t));
-    t.items.forEach(o => ['word', 'find', 'drag', 'findYes', 'dragYes', 'thatIs', 'retry', 'pairYes'].forEach(k => pairs.push(SAY[k](o, t))));
+    t.items.forEach(o => {
+      ['word', 'find', 'drag', 'findYes', 'dragYes', 'thatIs', 'retry', 'pairYes'].forEach(k => pairs.push(SAY[k](o, t)));
+      if (o.s) pairs.push(SAY.sentence(o));
+    });
   });
   const seen = new Map();
-  pairs.forEach(([en, vi]) => [['en', en], ['vi', vi]].forEach(([lang, text]) => { const key = clipKey(lang, text); seen.set(key, {lang, text, key}); }));
+  pairs.forEach(([en, vi]) => [['en', en], ...[].concat(vi).map(v => ['vi', v])].forEach(([lang, text]) => { const key = clipKey(lang, text); seen.set(key, {lang, text, key}); }));
   return [...seen.values()];
 };
 const clipKey = (lang, text) => {
@@ -310,10 +396,14 @@ function playPart(){
   } else playPart();
 }
 // Say the English line, then (optionally) the Vietnamese meaning.
-function talk(en, vi, onDone){
+// vi may be a list of short clips that make up one sentence. More [en, vi] pairs can follow.
+function talk(en, vi, onDone, ...more){
   stopVoice(); talkId++;
-  queue = [['en', en]]; queueDone = onDone || null;
-  if (vi && settings.vi) queue.push(['vi', vi]);
+  queue = []; queueDone = onDone || null;
+  [[en, vi], ...more].forEach(([e, v]) => {
+    queue.push(['en', e]);
+    if (v && settings.vi) [].concat(v).forEach(p => queue.push(['vi', p]));
+  });
   playPart();
 }
 // iOS only lets an audio element play later if it first played during a tap.
@@ -352,6 +442,9 @@ function visual(item, topic){
   return `<span class="emo">${item.v}</span>`;
 }
 function phrase(verb, item, topic){
+  if (topic.ask === 'who') return verb === 'Find' ? `Who is ${item.q}?` : `Who is ${item.q}? Drag here!`;
+  if (topic.ask === 'quote') return verb === 'Find' ? `Which one is ${item.en}?` : `Drag ${item.en}!`;
+  if (topic.noun) return `${verb} the ${item.en}${topic.noun}!`;
   if (topic.kind === 'color') return `${verb} ${item.en}!`;
   if (topic.kind === 'number') return `${verb} number ${item.en}!`;
   return `${verb} the ${item.en}!`;
@@ -390,10 +483,20 @@ function startScreen(){
   };
 }
 
+const levelStars = n => TOPICS.filter(t => t.level === n).reduce((a, t) => a + MODES.filter(m => stars[t.id + ':' + m.id]).length, 0);
+const levelOpen = l => settings.unlockAll || l.n === 1 || levelStars(l.n - 1) >= l.need;
 function homeScreen(){
+  if (!levelOpen(LEVELS[settings.level - 1] || LEVELS[0])) settings.level = 1;
+  const lv = settings.level;
   show(`${bar({back: null, title: 'Choose a topic', sub: 'Chọn chủ đề'})}
     <div class="stage">
-      <div class="grid six">${TOPICS.map(t => {
+      <div class="levels">${LEVELS.map(l => {
+        const open = levelOpen(l);
+        return `<button class="lvl ${open ? '' : 'locked'}" data-l="${l.n}" aria-current="${l.n === lv}">
+          <span class="li">${open ? l.icon : '🔒'}</span><span>Level ${l.n}<small>${open ? l.vi : `★ ${Math.min(levelStars(l.n - 1), l.need)}/${l.need}`}</small></span></button>`;
+      }).join('')}</div>
+      <p class="lockmsg" id="lockmsg" hidden></p>
+      <div class="grid six">${TOPICS.filter(t => t.level === lv).map(t => {
         const done = MODES.filter(m => stars[t.id + ':' + m.id]).length;
         return `<button class="tile" data-t="${t.id}" style="--t:${t.t};--td:${t.td}">
           ${done ? `<span class="star" aria-label="${done} sao">${'★'.repeat(Math.min(done, 3))}</span>` : ''}
@@ -402,8 +505,21 @@ function homeScreen(){
       <div class="parents">
         <button class="chip" id="optVi" aria-pressed="${settings.vi}"><span class="sw"></span>Đọc nghĩa tiếng Việt</button>
         <button class="chip" id="optSlow" aria-pressed="${settings.slow}"><span class="sw"></span>Đọc chậm</button>
+        <button class="chip" id="optAll" aria-pressed="${settings.unlockAll}"><span class="sw"></span>Mở mọi cấp độ</button>
       </div>
     </div>`, 'scroll');
+  $$('.lvl').forEach(b => b.onclick = () => {
+    const l = LEVELS[+b.dataset.l - 1];
+    if (!levelOpen(l)){
+      sfx.oops(); b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake');
+      const m = $('#lockmsg'); m.hidden = false;
+      m.textContent = `Bé cần ${l.need} ★ ở Level ${l.n - 1} để mở Level ${l.n} (đang có ${levelStars(l.n - 1)} ★).`;
+      talk(...SAY.locked());
+      return;
+    }
+    settings.level = l.n; store.set('bhta-settings', settings);
+    sfx.pop(); homeScreen(); talk(...SAY.level(l.n));
+  });
   $$('.tile').forEach(b => b.onclick = () => {
     const t = TOPICS.find(x => x.id === b.dataset.t);
     sfx.pop(); topicScreen(t); talk(...SAY.topic(t));
@@ -413,6 +529,7 @@ function homeScreen(){
     e.currentTarget.setAttribute('aria-pressed', settings[key]); sfx.pop();
   };
   toggle('#optVi', 'vi'); toggle('#optSlow', 'slow');
+  $('#optAll').onclick = () => { settings.unlockAll = !settings.unlockAll; store.set('bhta-settings', settings); sfx.pop(); homeScreen(); };
 }
 
 function topicScreen(t){
@@ -432,7 +549,7 @@ function learn(t, i = 0){
   show(`${bar({back: 'back', title: `${t.en}`, sub: `${i + 1} / ${t.items.length}`, sayBtn: true})}
     <div class="stage learn">
       <button class="card" id="card" aria-label="${item.en}">${visual(item, t)}</button>
-      <p class="word">${item.en}${settings.vi ? `<small>${item.vi}</small>` : ''}</p>
+      <p class="word">${item.en}${settings.vi ? `<small>${item.vi}</small>` : ''}${item.s ? `<span class="sent">${item.s}${settings.vi ? `<small>${item.vs}</small>` : ''}</span>` : ''}</p>
       <div class="nav">
         <button class="arrow" id="prev" aria-label="Trước">${ICON.left}</button>
         <button class="arrow" id="next" aria-label="Tiếp">${ICON.right}</button>
@@ -451,8 +568,8 @@ function learn(t, i = 0){
   };
   const say = () => {
     clearTimeout(autoTimer);
-    talk(...SAY.word(item), autoNext);
-    autoTimer = setTimeout(autoNext, 12000);   // in case the audio never reports that it ended
+    talk(...SAY.word(item), autoNext, ...(item.s ? [SAY.sentence(item)] : []));
+    autoTimer = setTimeout(autoNext, item.s ? 18000 : 12000);   // in case the audio never reports that it ended
     const c = $('#card'); c.classList.remove('bounce'); void c.offsetWidth; c.classList.add('bounce');
   };
   later(say, 250);
@@ -485,12 +602,12 @@ function learn(t, i = 0){
 /* ----- Find it: hear a word, tap the right picture ----- */
 function find(t, round = 0, prevTarget = null){
   const target = shuffle(t.items.filter(x => x !== prevTarget))[0];
-  const opts = shuffle([target, ...pickOthers(t.items, target, 2)]);
+  const opts = shuffle([target, ...pickOthers(t.items, target, choices(t) - 1)]);
   const [en, vi] = SAY.find(target, t);
   show(`${bar({back: 'back', title: '', sayBtn: true, dots: round})}
     <div class="stage">
-      <p class="prompt">${en}${settings.vi ? `<small>${vi}</small>` : ''}</p>
-      <div class="row">${opts.map((o, k) => `<button class="card" data-k="${k}" aria-label="${o.en}">${visual(o, t)}</button>`).join('')}</div>
+      <p class="prompt">${en}${settings.vi ? `<small>${viText(vi)}</small>` : ''}</p>
+      <div class="row ${choices(t) > 3 ? 'many' : ''}">${opts.map((o, k) => `<button class="card" data-k="${k}" aria-label="${o.en}">${visual(o, t)}</button>`).join('')}</div>
     </div>`);
   onBack(() => topicScreen(t));
   const ask = () => talk(en, vi);
@@ -503,7 +620,7 @@ function find(t, round = 0, prevTarget = null){
     if (o === target){
       locked = true; sfx.yay(); b.classList.add('good');
       $$('.row .card').forEach(x => { if (x !== b) x.classList.add('dim'); });
-      later(() => talk(...SAY.findYes(target)), 250);
+      later(() => talk(...SAY.findYes(target, t)), 250);
       later(() => round + 1 >= ROUNDS ? celebrate(t, 'find') : find(t, round + 1, target), 2200);
     } else {
       sfx.oops(); b.classList.remove('bad'); void b.offsetWidth; b.classList.add('bad');
@@ -515,13 +632,13 @@ function find(t, round = 0, prevTarget = null){
 /* ----- Drag: drag the right picture onto its shadow ----- */
 function drag(t, round = 0, prevTarget = null){
   const target = shuffle(t.items.filter(x => x !== prevTarget))[0];
-  const opts = shuffle([target, ...pickOthers(t.items, target, 2)]);
+  const opts = shuffle([target, ...pickOthers(t.items, target, choices(t) - 1)]);
   const [en, vi] = SAY.drag(target, t);
   show(`${bar({back: 'back', title: '', sayBtn: true, dots: round})}
     <div class="stage">
       <div class="zone ghost" id="zone" aria-label="Khung đích">${visual(target, t)}</div>
-      <p class="prompt">${en}${settings.vi ? `<small>${vi}</small>` : ''}</p>
-      <div class="row drag-row">${opts.map((o, k) => `<div class="card" data-k="${k}" role="button" aria-label="${o.en}">${visual(o, t)}</div>`).join('')}</div>
+      <p class="prompt">${en}${settings.vi ? `<small>${viText(vi)}</small>` : ''}</p>
+      <div class="row drag-row ${choices(t) > 3 ? 'many' : ''}">${opts.map((o, k) => `<div class="card" data-k="${k}" role="button" aria-label="${o.en}">${visual(o, t)}</div>`).join('')}</div>
     </div>`);
   onBack(() => topicScreen(t));
   const ask = () => talk(en, vi);
@@ -550,7 +667,7 @@ function drag(t, round = 0, prevTarget = null){
     const end = e => {
       if (!active) return; active = false;
       el.classList.remove('dragging'); zone.classList.remove('hot');
-      if (!moved){ el.style.transform = ''; talk(...SAY.word(o)); return; }
+      if (!moved){ el.style.transform = ''; talk(...SAY.word(o, t)); return; }
       if (inZone(e.clientX, e.clientY) && o === target){
         locked = true; sfx.yay();
         // snap into the zone centre
@@ -560,7 +677,7 @@ function drag(t, round = 0, prevTarget = null){
         el.style.transform = `translate(${cur.m41 + (z.left + z.width / 2) - (r.left + r.width / 2)}px,${cur.m42 + (z.top + z.height / 2) - (r.top + r.height / 2)}px)`;
         zone.classList.add('done');
         $$('.drag-row .card').forEach(x => { if (x !== el) x.classList.add('dim'); });
-        later(() => talk(...SAY.dragYes(target)), 300);
+        later(() => talk(...SAY.dragYes(target, t)), 300);
         later(() => round + 1 >= ROUNDS ? celebrate(t, 'drag') : drag(t, round + 1, target), 2300);
       } else {
         if (inZone(e.clientX, e.clientY)){ sfx.oops(); talk(...SAY.retry(o, t)); }
@@ -574,11 +691,11 @@ function drag(t, round = 0, prevTarget = null){
 
 /* ----- Match: memory game with 3 pairs ----- */
 function match(t){
-  const picks = shuffle(t.items).slice(0, 3);
+  const picks = shuffle(t.items).slice(0, choices(t));
   const deck = shuffle([...picks, ...picks]);
   show(`${bar({back: 'back', title: 'Find the pairs', sub: 'Lật thẻ, tìm 2 hình giống nhau'})}
     <div class="stage">
-      <div class="mgrid">${deck.map((o, k) => `<button class="mcard" data-k="${k}" aria-label="Thẻ ${k + 1}">
+      <div class="mgrid ${picks.length > 3 ? 'eight' : ''}">${deck.map((o, k) => `<button class="mcard" data-k="${k}" aria-label="Thẻ ${k + 1}">
         <span class="in"><span class="b"><span>?</span></span><span class="f">${visual(o, t)}</span></span></button>`).join('')}</div>
     </div>`);
   onBack(() => topicScreen(t));
@@ -593,7 +710,7 @@ function match(t){
     const [a, c] = open; open = [];
     if (deck[+a.dataset.k] === deck[+c.dataset.k]){
       found++;
-      later(() => { sfx.yay(); a.classList.add('matched'); c.classList.add('matched'); talk(...SAY.pairYes(o)); }, 450);
+      later(() => { sfx.yay(); a.classList.add('matched'); c.classList.add('matched'); talk(...SAY.pairYes(o, t)); }, 450);
       if (found === picks.length) later(() => celebrate(t, 'match'), 2400);
     } else {
       busy = true;
