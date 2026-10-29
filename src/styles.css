@@ -138,6 +138,34 @@ button:focus-visible{outline:4px solid var(--sky);outline-offset:4px}
 .mcard.matched .f{box-shadow:0 0 0 6px var(--leaf)}
 .mcard .f .emo{font-size:calc(var(--s)*.58)}
 
+/* surprise boxes: the match card with a gift on its back */
+.mcard.box .b{background:var(--berry);box-shadow:0 6px 0 var(--berry-deep)}
+.mcard.box .b span{font-size:calc(var(--s)*.5)}
+.mcard.box:not(.open) .b{animation:breathe 2.4s ease-in-out infinite}
+
+/* balloons: each .float rises from below the sky to above it, forever, until a balloon is popped */
+.sky{flex:1;min-height:0;position:relative;overflow:hidden;width:100%;border-radius:32px;background:linear-gradient(#BFE6FF,#E8F7FF)}
+.float{--s:clamp(96px,min(22vw,24vh),180px);position:absolute;left:calc(var(--s)/2 + (100% - var(--s))*var(--f));top:100%;width:var(--s);margin-left:calc(var(--s)/-2);animation:rise var(--fly) linear var(--d) infinite}
+.sky.still .float{animation-play-state:paused}
+.balloon{width:var(--s);height:calc(var(--s)*1.15);padding:0;border-radius:50% 50% 48% 48%/55% 55% 45% 45%;background:radial-gradient(circle at 30% 28%,rgba(255,255,255,.65) 0 12%,transparent 13%),var(--c);box-shadow:inset -10px -12px 0 rgba(0,0,0,.1);display:grid;place-items:center;position:relative}
+.balloon::after{content:"";position:absolute;top:100%;left:50%;width:2px;height:calc(var(--s)*.5);background:var(--muted);opacity:.5}
+.balloon .emo{font-size:calc(var(--s)*.5)}
+.balloon .num b{font-size:calc(var(--s)*.38)}
+.balloon .blob{width:60%;border:4px solid #fff}
+.balloon.popped{animation:burst .5s forwards}
+@keyframes rise{from{top:100%}to{top:calc(var(--s)*-1.8)}}
+@keyframes burst{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1.35);opacity:0}}
+
+/* say it */
+.say-it .card{--s:clamp(160px,min(52vw,38vh),340px)}
+.say-it .prompt{font-size:clamp(2rem,7vmin,3.6rem)}
+.mic{width:clamp(96px,16vmin,130px);aspect-ratio:1;border-radius:50%;font-size:clamp(2.6rem,8vmin,3.8rem);background:var(--card);box-shadow:0 7px 0 var(--card-edge);opacity:.5;transition:opacity .2s}
+.mic.ready{opacity:1;background:var(--berry);box-shadow:0 7px 0 var(--berry-deep);animation:breathe 1.4s ease-in-out infinite}
+.mic.rec{opacity:1;background:var(--leaf);box-shadow:0 0 0 10px rgba(47,176,103,.3),0 7px 0 var(--leaf-deep);animation:breathe .6s ease-in-out infinite}
+.mic.play,.mic.done{opacity:1;background:var(--sun);box-shadow:0 7px 0 var(--sun-deep)}
+.mic:active{transform:translateY(5px)}
+.say-it .note{font-weight:700;font-size:1.1rem}
+
 /* celebrate */
 .yay{align-items:center;justify-content:center;text-align:center}
 .bigstars{display:flex;gap:10px;font-size:clamp(4rem,14vmin,8rem);line-height:1;color:var(--sun)}

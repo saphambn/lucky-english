@@ -7,8 +7,8 @@ export type Screen =
   | {name: 'home'}
   | {name: 'topic', topic: Topic}
   | {name: 'learn', topic: Topic, i?: number}
-  | {name: 'find' | 'drag', topic: Topic, round?: number, prev?: Item}
-  | {name: 'match', topic: Topic}
+  | {name: 'find' | 'drag' | 'pop' | 'say', topic: Topic, round?: number, prev?: Item}
+  | {name: 'match' | 'peek', topic: Topic}
   | {name: 'celebrate', topic: Topic, mode: ModeId};
 
 export const NavContext = createContext<(s: Screen) => void>(() => {});

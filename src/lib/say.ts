@@ -5,7 +5,7 @@ import { LEVELS, TOPICS, type Item, type Topic } from '../data/topics';
 export type Vi = string | string[];
 export type Line = [en: string, vi?: Vi];
 
-const NUM_EN = ['', 'one', 'two', 'three'], NUM_VI = ['', 'một', 'hai', 'ba'];
+const NUM_EN = ['', 'one', 'two', 'three', 'four'], NUM_VI = ['', 'một', 'hai', 'ba', 'bốn'];
 
 export function phrase(verb: 'Find' | 'Drag', item: Item, topic: Topic){
   if (topic.ask === 'who') return verb === 'Find' ? `Who is ${item.q}?` : `Who is ${item.q}? Drag here!`;
@@ -30,6 +30,9 @@ export const SAY = {
   hello:   (): Line => ["Hello! Let's learn English!", 'Xin chào! Cùng học tiếng Anh nào!'],
   pairs:   (): Line => ['Find the pairs!', 'Tìm hai hình giống nhau nhé!'],
   win:     (): Line => ['Great job! You did it!', 'Bé giỏi quá!'],
+  boxes:   (): Line => ['Open the boxes!', 'Bé mở hộp quà nào!'],
+  yourTurn: (): Line => ['Your turn!', 'Đến lượt bé nói!'],
+  wellDone: (): Line => ['Well done!', 'Giỏi lắm!'],
   topic:   (t: Topic): Line => [t.en, t.vi],
   word:    (o: Item): Line => [o.en, o.vi],
   find:    (o: Item, t: Topic): Line => [phrase('Find', o, t), viLine(t, `Tìm ${o.vi} nào!`, ['Bé hãy tìm', vq(o)])],
@@ -50,7 +53,7 @@ export const clipKey = (lang: string, text: string) => {
 
 // The full list of lines to record, de-duplicated: [{lang, text, key}]. Exposed as window.ALL_LINES for the audio tools.
 export function allLines(){
-  const lines: Line[] = [SAY.hello(), SAY.pairs(), SAY.win(), SAY.locked(), ...LEVELS.map(l => SAY.level(l.n))];
+  const lines: Line[] = [SAY.hello(), SAY.pairs(), SAY.win(), SAY.locked(), SAY.boxes(), SAY.yourTurn(), SAY.wellDone(), ...LEVELS.map(l => SAY.level(l.n))];
   TOPICS.forEach(t => {
     lines.push(SAY.topic(t));
     t.items.forEach(o => {
