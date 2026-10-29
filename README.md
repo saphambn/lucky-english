@@ -18,6 +18,6 @@ npm run build    # ra thư mục dist/ (bản đưa lên web)
 - `src/lib/say.ts`: mọi câu đọc. `window.ALL_LINES()` liệt kê các câu cần thu âm.
 - `src/lib/audio.ts`: phát âm thanh (gói MP3 trong `public/audio/`, mở khóa âm thanh iOS, giọng máy dự phòng, tiếng hiệu ứng).
 - `src/lib/store.ts`: cài đặt của bố mẹ và sao, lưu trong localStorage.
-- `src/screens/`: từng màn hình (Start, Home, Topic, Learn, Find, Drag, Match, Celebrate).
+- `src/screens/`: từng màn hình (Start, Home, Topic, Learn, Find, Drag, Match, Pop = bóng bay, Peek = hộp quà, SayIt = nói theo, Celebrate).
 - `src/components/`: phần dùng chung (thanh trên, hình, nút gạt, pháo giấy).
 - `public/audio/`: gói MP3 + `packs.json` (key → [gói, vị trí, độ dài]).

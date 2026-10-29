@@ -54,6 +54,9 @@ const RAW: RawTopic[] = [
   {id:'body', en:'My Body', vi:'Cơ thể', icon:'👂', t:'#FFF1B0', td:'#E0C04A', kind:'emoji', items:[
     ['eye','con mắt','👁️'],['ear','cái tai','👂'],['nose','cái mũi','👃'],['mouth','cái miệng','👄'],
     ['hand','bàn tay','✋'],['foot','bàn chân','🦶']]},
+  {id:'shapes', en:'Shapes', vi:'Hình khối', icon:'🔺', t:'#FFE3C2', td:'#E7A55C', kind:'emoji', items:[
+    ['circle','hình tròn','🔵'],['square','hình vuông','🟦'],['triangle','hình tam giác','🔺'],
+    ['star','ngôi sao','⭐'],['heart','trái tim','❤️'],['diamond','hình thoi','🔷']]},
   /* ---- Level 2: new everyday words; games show 4 pictures and 4 pairs ---- */
   {id:'family', level:2, en:'Family', vi:'Gia đình', icon:'👨‍👩‍👧', t:'#FFD9C7', td:'#E89A74', kind:'emoji', items:[
     ['mommy','mẹ','👩'],['daddy','bố','👨'],['baby','em bé','👶'],['grandma','bà','👵'],
@@ -67,6 +70,15 @@ const RAW: RawTopic[] = [
   {id:'weather', level:2, en:'Weather', vi:'Thời tiết', icon:'🌦️', t:'#D2F1F7', td:'#74C1D1', kind:'emoji', items:[
     ['sun','mặt trời','☀️'],['cloud','đám mây','☁️'],['rain','mưa','🌧️'],['snow','tuyết','❄️'],
     ['wind','gió','🌬️'],['rainbow','cầu vồng','🌈']]},
+  {id:'clothes', level:2, en:'Clothes', vi:'Quần áo', icon:'👕', t:'#E0F0FF', td:'#8DB4E0', kind:'emoji', items:[
+    ['T-shirt','áo phông','👕'],['pants','quần dài','👖'],['dress','cái váy','👗'],['hat','cái mũ','👒'],
+    ['shoes','đôi giày','👟'],['socks','đôi tất','🧦'],['jacket','áo khoác','🧥']]},
+  {id:'home', level:2, en:'My House', vi:'Đồ trong nhà', icon:'🛋️', t:'#F4E4D4', td:'#C99B6E', kind:'emoji', items:[
+    ['bed','cái giường','🛏️'],['chair','cái ghế','🪑'],['door','cái cửa','🚪'],['window','cửa sổ','🪟'],
+    ['lamp','cái đèn','💡'],['sofa','ghế sô pha','🛋️'],['TV','ti vi','📺']]},
+  {id:'school', level:2, en:'School Things', vi:'Đồ dùng học tập', icon:'🎒', t:'#FFE4B5', td:'#E0A848', kind:'emoji', items:[
+    ['book','quyển sách','📕'],['pencil','bút chì','✏️'],['crayon','bút sáp màu','🖍️'],['bag','cặp sách','🎒'],
+    ['scissors','cái kéo','✂️'],['ruler','thước kẻ','📏']]},
   {id:'numbers2', level:2, en:'Numbers 6–10', vi:'Số 6 đến 10', icon:'🔟', t:'#CDE3FF', td:'#7EA7E0', kind:'number', items:[
     ['six','số sáu',6],['seven','số bảy',7],['eight','số tám',8],['nine','số chín',9],['ten','số mười',10]]},
   /* ---- Level 3: actions, feelings, places and short phrases; Learn also reads a short sentence ---- */
@@ -101,6 +113,30 @@ const RAW: RawTopic[] = [
     ['sorry','xin lỗi','🥺',{s:'I am sorry.',vs:'Con xin lỗi.'}],
     ['good night','chúc ngủ ngon','🌙',{s:'Good night, Daddy!',vs:'Chúc bố ngủ ngon!'}],
     ['I love you','con yêu bố mẹ','❤️',{s:'I love you, Mommy!',vs:'Con yêu mẹ!'}]]},
+  /* ---- Level 4: the wider world; every word comes with a short sentence ---- */
+  {id:'wild', level:4, en:'Wild Animals', vi:'Thú rừng', icon:'🦁', t:'#FFE6B3', td:'#E2AE45', kind:'emoji', items:[
+    ['lion','sư tử','🦁',{s:'The lion is strong!',vs:'Sư tử rất khỏe!'}],
+    ['tiger','con hổ','🐯',{s:'The tiger can run fast!',vs:'Con hổ chạy rất nhanh!'}],
+    ['elephant','con voi','🐘',{s:'The elephant is big!',vs:'Con voi thật to!'}],
+    ['monkey','con khỉ','🐒',{s:'The monkey likes bananas!',vs:'Khỉ thích ăn chuối!'}],
+    ['giraffe','hươu cao cổ','🦒',{s:'The giraffe is tall!',vs:'Hươu cao cổ thật cao!'}],
+    ['zebra','ngựa vằn','🦓',{s:'The zebra is black and white!',vs:'Ngựa vằn màu đen và trắng!'}],
+    ['bear','con gấu','🐻',{s:'The bear likes honey!',vs:'Gấu thích ăn mật ong!'}]]},
+  {id:'sea', level:4, en:'Sea Animals', vi:'Dưới biển', icon:'🐳', t:'#CCEFFF', td:'#5FB4DA', kind:'emoji', items:[
+    ['whale','cá voi','🐳',{s:'The whale is very big!',vs:'Cá voi rất to!'}],
+    ['dolphin','cá heo','🐬',{s:'The dolphin can jump!',vs:'Cá heo biết nhảy!'}],
+    ['shark','cá mập','🦈',{s:'The shark has big teeth!',vs:'Cá mập có răng to!'}],
+    ['octopus','bạch tuộc','🐙',{s:'The octopus has eight legs!',vs:'Bạch tuộc có tám cái chân!'}],
+    ['crab','con cua','🦀',{s:'The crab is red!',vs:'Con cua màu đỏ!'}],
+    ['turtle','con rùa','🐢',{s:'The turtle is slow.',vs:'Con rùa đi chậm.'}]]},
+  {id:'jobs', level:4, en:'Jobs', vi:'Nghề nghiệp', icon:'🧑‍🚒', t:'#E4E0FF', td:'#9C8FE0', kind:'emoji', items:[
+    ['doctor','bác sĩ','🧑‍⚕️',{s:'I want to be a doctor!',vs:'Bé muốn làm bác sĩ!'}],
+    ['teacher','cô giáo','🧑‍🏫',{s:'I want to be a teacher!',vs:'Bé muốn làm cô giáo!'}],
+    ['farmer','nông dân','🧑‍🌾',{s:'I want to be a farmer!',vs:'Bé muốn làm nông dân!'}],
+    ['cook','đầu bếp','🧑‍🍳',{s:'I want to be a cook!',vs:'Bé muốn làm đầu bếp!'}],
+    ['police officer','công an','👮',{s:'I want to be a police officer!',vs:'Bé muốn làm công an!'}],
+    ['firefighter','lính cứu hỏa','🧑‍🚒',{s:'I want to be a firefighter!',vs:'Bé muốn làm lính cứu hỏa!'}],
+    ['pilot','phi công','🧑‍✈️',{s:'I want to be a pilot!',vs:'Bé muốn làm phi công!'}]]},
 ];
 
 export const TOPICS: Topic[] = RAW.map(t => ({level: 1, ...t, items: t.items.map(([en, vi, v, x]) => ({en, vi, v, ...x}))}));
@@ -111,15 +147,19 @@ export const LEVELS: Level[] = [
   {n:1, icon:'🌱', vi:'Cấp 1', need:0},
   {n:2, icon:'🌿', vi:'Cấp 2', need:6},
   {n:3, icon:'🌳', vi:'Cấp 3', need:6},
+  {n:4, icon:'🌴', vi:'Cấp 4', need:6},
 ];
 
-export type ModeId = 'learn' | 'find' | 'drag' | 'match';
+export type ModeId = 'learn' | 'find' | 'drag' | 'match' | 'pop' | 'peek' | 'say';
 export interface Mode { id: ModeId; en: string; vi: string; icon: string; t: string; td: string }
 export const MODES: Mode[] = [
   {id:'learn', en:'Learn', vi:'Học từ mới', icon:'👀', t:'#FFFFFF', td:'#C9D6E8'},
   {id:'find',  en:'Find it', vi:'Chạm đúng hình', icon:'👆', t:'#FFE7A3', td:'#E3B23C'},
   {id:'drag',  en:'Drag', vi:'Kéo vào bóng', icon:'✋', t:'#CFF2DD', td:'#6CC08F'},
   {id:'match', en:'Match', vi:'Lật thẻ tìm cặp', icon:'🃏', t:'#FFD6E2', td:'#E78BA6'},
+  {id:'pop',   en:'Balloons', vi:'Chạm bóng bay', icon:'🎈', t:'#D4ECFF', td:'#7FB2E5'},
+  {id:'peek',  en:'Surprise', vi:'Mở hộp quà', icon:'🎁', t:'#E9DDFF', td:'#A98BE6'},
+  {id:'say',   en:'Say it', vi:'Nói theo', icon:'🎤', t:'#FFE0CC', td:'#E8996A'},
 ];
 export const ROUNDS = 5;
 

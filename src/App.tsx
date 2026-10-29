@@ -8,6 +8,9 @@ import { Learn } from './screens/Learn';
 import { Find } from './screens/Find';
 import { Drag } from './screens/Drag';
 import { Match } from './screens/Match';
+import { Pop } from './screens/Pop';
+import { Peek } from './screens/Peek';
+import { SayIt } from './screens/SayIt';
 import { Celebrate } from './screens/Celebrate';
 
 export function App(){
@@ -25,6 +28,9 @@ function render(s: Screen, key: number){
     case 'find': return <Find key={key} topic={s.topic} round={s.round ?? 0} prev={s.prev}/>;
     case 'drag': return <Drag key={key} topic={s.topic} round={s.round ?? 0} prev={s.prev}/>;
     case 'match': return <Match key={key} topic={s.topic}/>;
+    case 'pop': return <Pop key={key} topic={s.topic} round={s.round ?? 0} prev={s.prev}/>;
+    case 'peek': return <Peek key={key} topic={s.topic}/>;
+    case 'say': return <SayIt key={key} topic={s.topic} round={s.round ?? 0} prev={s.prev}/>;
     case 'celebrate': return <Celebrate key={key} topic={s.topic} mode={s.mode}/>;
   }
 }
